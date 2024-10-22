@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openproject
+  namespace: cicd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openproject
+  template:
+    metadata:
+      labels:
+        app: openproject
+    spec:
+      containers:
+      - name: openproject
+        image: openproject/community:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /var/openproject
+          name: openproject-storage
+      volumes:
+      - name: openproject-storage
+        persistentVolumeClaim:
+          claimName: openproject-pvc
